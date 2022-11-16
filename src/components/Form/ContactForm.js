@@ -1,14 +1,20 @@
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { Box } from '../../components/Box';
+import { Box } from '../Utilits/Box';
 import {
   ContactFrm,
   FormLabel,
   FormInput,
   FormBtn,
 } from './ContactForm.styled';
+import { nanoid } from 'nanoid';
 
-const ContactForm = ({ onSubmit }) => {
+import { useSelector, useDispatch } from 'react-redux';
+import { addContact, getContacts } from '../../Redux/contactSlice';
+
+const ContactForm = () => {
+  const contactList = useSelector(getContacts);
+  const dispatch = useDispatch();
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
@@ -30,7 +36,16 @@ const ContactForm = ({ onSubmit }) => {
   // Called when the form is submitted
   const handleSubmit = evt => {
     evt.preventDefault();
-    onSubmit(name, number);
+    const isInclude = contactList.map(contact => contact.name);
+    if (isInclude.includes(name)) {
+      return alert(`${name} is already in contacts`);
+    }
+    const contactToAdd = {
+      name,
+      id: nanoid(),
+      number,
+    };
+    dispatch(addContact(contactToAdd));
     reset();
   };
 

@@ -1,37 +1,31 @@
-import PropTypes from 'prop-types';
+import React, { useMemo } from 'react';
 import { List } from './ContactList.styled';
-
 import ContactListItem from '../ContactListItem';
+import { useSelector } from 'react-redux';
+import { getContacts } from '../../Redux/contactSlice';
+import { getFilter } from '../../Redux/filterSlice';
 
-const ContactList = ({ renderItems, onDelitBtn, contactsQnt }) => {
+const ContactList = () => {
+  const contactList = useSelector(getContacts);
+  const filterItem = useSelector(getFilter);
+
+  //Responsible for rendering the requested/all contacts
+  const findContactbyName = useMemo(() => {
+    return contactList.filter(contact =>
+      contact.name.toLowerCase().includes(filterItem)
+    );
+  }, [contactList, filterItem]);
+
   return (
     <>
-      <h2>Contacts : {contactsQnt}</h2>
+      <h2>Contacts : {findContactbyName.length}</h2>
       <List>
-        {renderItems.map(({ name, number, id }) => (
-          <ContactListItem
-            key={id}
-            onDelitBtn={onDelitBtn}
-            name={name}
-            number={number}
-            id={id}
-          />
+        {findContactbyName.map(({ name, number, id }) => (
+          <ContactListItem key={id} name={name} number={number} id={id} />
         ))}
       </List>
     </>
   );
-};
-
-ContactList.propTypes = {
-  renderItems: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    })
-  ),
-  onDelitBtn: PropTypes.func,
-  contactsQnt: PropTypes.number.isRequired,
-  id: PropTypes.string,
 };
 
 export default ContactList;
