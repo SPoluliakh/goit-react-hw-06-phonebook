@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Box } from '../Utilits/Box';
 import {
@@ -88,10 +87,6 @@ const ContactForm = () => {
       </ContactFrm>
     </Box>
   );
-};
-
-ContactForm.propTypes = {
-  onSubmit: PropTypes.func,
 };
 
 export default ContactForm;
