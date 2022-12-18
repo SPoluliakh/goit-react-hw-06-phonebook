@@ -1,4 +1,3 @@
-import React, { useMemo } from 'react';
 import { List } from './ContactList.styled';
 import ContactListItem from '../ContactListItem';
 import { useSelector } from 'react-redux';
@@ -10,17 +9,17 @@ const ContactList = () => {
   const filterItem = useSelector(getFilter);
 
   //Responsible for rendering the requested/all contacts
-  const findContactbyName = useMemo(() => {
+  const findContactbyName = () => {
     return contactList.filter(contact =>
       contact.name.toLowerCase().includes(filterItem)
     );
-  }, [contactList, filterItem]);
+  };
 
   return (
     <>
-      <h2>Contacts : {findContactbyName.length}</h2>
+      <h2>Contacts : {findContactbyName()?.length}</h2>
       <List>
-        {findContactbyName.map(({ name, number, id }) => (
+        {findContactbyName()?.map(({ name, number, id }) => (
           <ContactListItem key={id} name={name} number={number} id={id} />
         ))}
       </List>
